@@ -2,3 +2,4 @@ tk
 requests
 logging
 pyarmor
+easygui
