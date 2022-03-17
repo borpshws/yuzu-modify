@@ -2,25 +2,36 @@ from tkinter import *
 import os, requests, logging, easygui
 
 def splash():
-    splash_root = Tk()
-    splash_root.overrideredirect(1)
-    splash_root.geometry("512x512")
-    splash_root.lift()
-    splash_root.image = PhotoImage(file='splash.png')
-    splash_label = Label(splash_root, image=splash_root.image, bg='white')
-    splash_root.eval('tk::PlaceWindow . center')
-    splash_root.wm_attributes("-topmost", True)
-    splash_root.wm_attributes("-disabled", True)
-    splash_root.wm_attributes("-transparentcolor", "white")
-    splash_label.pack()
+    try:
+        splash_root = Tk()
+        
+        windowWidth = splash_root.winfo_reqwidth()
+        windowHeight = splash_root.winfo_reqheight()
+        logging.info(f"Width{windowWidth},Height{windowHeight}")
 
-    def splash2():
-        splash_root.destroy()
-        logging.info('splash end')
+        positionRight = int(splash_root.winfo_screenwidth()/2 - windowWidth/2)
+        positionDown = int(splash_root.winfo_screenheight()/2 - windowHeight/2)
+
+        splash_root.overrideredirect(1)
+        splash_root.geometry("+{}+{}".format(positionRight, positionDown))
+        splash_root.lift()
+        splash_root.image = PhotoImage(file='splash.png')
+        splash_label = Label(splash_root, image=splash_root.image, bg='white')
+        #splash_root.eval('tk::PlaceWindow . center')
+        splash_root.wm_attributes("-topmost", True)
+        splash_root.wm_attributes("-disabled", True)
+        splash_root.wm_attributes("-transparentcolor", "white")
+        splash_label.pack()
+
+        def splash2():
+            splash_root.destroy()
+            logging.info('splash end')
+            main()
+
+        splash_root.after(3000, splash2)
+        mainloop()
+    except TclError:
         main()
-
-    splash_root.after(3000, splash2)
-    mainloop()
 
 def main():
     logging.info('main function entered, calling for keys...')
@@ -124,6 +135,7 @@ def end(cond) -> None:
         exit()
 
 if __name__ == '__main__':
+    print('decode > PY')
     print('Copyright (c) 2022, borpshws')
     logging.basicConfig(level=logging.INFO, format='%(msecs)03d %(levelname)s: %(message)s')
     logging.info('creating splash for 3s')
